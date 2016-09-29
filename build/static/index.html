@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="griffinApp" ng-controller="appController as app">
+	<head>
+		<link rel="stylesheet" href="css/angular-material.min.css">
+		<link rel="stylesheet" href="css/app.css">
+		<link rel="icon" href="img/midas_icon.png">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="initial-scale=1">
+		<title ng-bind="::app.title"></title>
+		<style type="text/css">
+			html {
+			overflow:hidden;
+			}
+		</style>
+	</head>
+	<body layout-fill>
+		<md-content layout='row' layout-fill  layout-margin style="overflow:hidden; background-color: black">
+			<div>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Packet Sequence</label>
+					<input ng-model="app.channel.display.seqID">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Hardware ID</label>
+					<input ng-model="app.channel.display.hwID">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Build Timestamp</label>
+					<input ng-model="app.channel.display.build">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Trigger Timestamp</label>
+					<input ng-model="app.channel.display.timestamp">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Trigger Offset</label>
+					<input ng-model="app.channel.display.offset">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Module ID</label>
+					<input ng-model="app.channel.display.moduleId">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Channel Type</label>
+					<input ng-model="app.channel.display.channelType">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Channel ID</label>
+					<input ng-model="app.channel.display.channelID">
+				</md-input-container>
+				<md-input-container class="md-block" flex-gt-sm>
+					<label>Number of Samples</label>
+					<input ng-model="app.channel.display.sampleCnt">
+				</md-input-container>
+			</div>
+			<chart3d flex style="position: relative"
+				legend="Waveforms"
+				ymin='-1000'
+				ymax='1000'
+				channeltitle="Channel 0"
+				ytitle='Amplitude [milliVolts]'
+				xtitle='Time [nanoseconds]'
+				labels="Channel 0"
+				updated="app.channel.updated"
+				waveformdata="app.channel.data"
+				data="app.channel"
+				channellabels="Channel 1,Channel 2, Channel 3, Channel 4"
+				channelcolors="#006fff,#ffffff,#ff6600,#ff0000,#33cc33,#ff3399,#00ffff,#ffff00" 
+				linecolor="#006fff"
+				gridcolor="#00ff00"
+				cursorcolor="#00ff00"
+				wireframecolor="#00ff00"
+				fillcolor="#ffffff"
+				backgroundcolor="#000000"
+				samplingrate='10'
+				minimapmode='1'
+				numdivs='10'
+				helpboxbutton='0'
+				>
+			</chart3d>
+			<!--
+			1) #006fff,#ffffff,#ffff00,#ff0000,#ff00ff,#33ffbd,#00ff00,#660033
+			2) #006fff,#ffffff,#ff6600,#ff0000,#33cc33,#ff3399,#00ffff,#ffff00
+			3) #FFB300,#803E75,#FF6800,#A6BDD7,#C10020,#CEA262,#007D34,#53377A 
+			-->
+		</md-content>
+		<script src="js/lib/dygraph/1.10/dygraph-combined.js"></script>
+		<script src="js/lib/twgl-full.min.js"></script>
+		<script src="js/lib/webgl-lines.js"></script>
+		<script src="js/lib/socket.io/socket.io.js"></script>
+		<!-- <script src="js/lib/three/Detector.js"></script>
+		<script src="js/lib/three/three.min.js"></script> -->
+		<script src="js/lib/three/stats.min.js"></script>
+		<script src='js/bundle.js'></script>
+	</body>
+</html>

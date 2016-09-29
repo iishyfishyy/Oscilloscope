@@ -1,0 +1,202 @@
+:root {
+  --width-button: 200px;
+}
+
+.button {
+  width: var(--width-button);
+}
+
+* {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.adjustedmargin{
+  margin-top: -15%;
+  margin-bottom: -15%;
+}
+
+.colorbox {
+  float: left;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  border: 1px solid rgba(0, 0, 0, .2);
+}
+
+.colorbox:hover {
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.shrink {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.shrink:hover, .shrink:focus, .shrink:active {
+  -webkit-transform: scale(0.9);
+  transform: scale(0.9);
+}
+
+.fade {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: color, background-color;
+  transition-property: color, background-color;
+}
+.fade:hover, .fade:focus, .fade:active {
+  background-color: #2098d1;
+  color: white;
+}
+
+*:focus {
+    /*
+    Removes ugly outline from HTML elements.
+    */
+    outline: none;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 3px solid;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.cursor_text{
+  font-size:           14px;
+  pointer-events:      none;
+  text-decoration:     none;
+/*  -webkit-transition:  100ms linear 0s;
+    -moz-transition:     100ms linear 0s;
+    -o-transition:       100ms linear 0s;
+    transition:          100ms linear 0s;*/
+  outline:             0 none;
+  -webkit-text-stroke-width: 0.1px;
+  -webkit-text-stroke-color: black;
+  z-index: 10;
+}
+
+.noselect{
+	  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none;    /* mozilla browsers */
+    -ms-user-select: none;     /* IE10+ */
+}
+
+.fade_out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 300ms, opacity 300ms;
+}
+.fade_in {
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s linear 0s, opacity 300ms;
+}
+
+.vertical{
+  transform: rotate(-90deg);
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+.unselectable {
+    -moz-user-select: -moz-none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.noIbar {
+cursor:default;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #0080ff;
+    color: white;
+}
+
+.modal-body {padding: 2px 16px; color: black;}
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #0080ff;
+    color: white;
+}
