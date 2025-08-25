@@ -2,117 +2,133 @@ name: Checkbox Checker
 
 on:
   pull_request:
-    types: [opened, synchronize, edited]
-  pull_request_review_comment:
-    types: [created, edited]
-  issue_comment:
-    types: [created, edited]
+    types: [opened, edited, synchronize]
+  issues:
+    types: [opened, edited, deleted]
 
 jobs:
-  check-checkboxes:
+  job1:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || (github.event.issue && github.event.issue.pull_request)
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: mheap/require-checklist-action@v2
+        with:
+          requireChecklist: false # If this is true and there are no checklists detected, the action will fail
+          
+# name: Checkbox Checker
 
-    - name: Check for unchecked checkboxes
-      uses: actions/github-script@v7
-      with:
-        script: |
-          let hasUncheckedBoxes = false;
+# on:
+#   pull_request:
+#     types: [opened, synchronize, edited]
+#   pull_request_review_comment:
+#     types: [created, edited]
+#   issue_comment:
+#     types: [created, edited]
 
-          // Get PR number
-          const prNumber = context.payload.pull_request?.number ||
-                          context.payload.issue?.number;
+# jobs:
+#   check-checkboxes:
+#     runs-on: ubuntu-latest
+#     if: github.event_name == 'pull_request' || (github.event.issue && github.event.issue.pull_request)
 
-          if (!prNumber) {
-            console.log('No PR number found');
-            return;
-          }
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v4
 
-          // Function to check for unchecked checkboxes
-          function hasUncheckedCheckboxes(text) {
-            if (!text) return false;
-            // Match unchecked checkboxes: - [ ] but not - [x] or - [X]
-            const uncheckedPattern = /^[\s]*-[\s]*\[[\s]*\][\s]*/gm;
-            const checkedPattern = /^[\s]*-[\s]*\[[xX]\][\s]*/gm;
+#     - name: Check for unchecked checkboxes
+#       uses: actions/github-script@v7
+#       with:
+#         script: |
+#           let hasUncheckedBoxes = false;
 
-            const unchecked = text.match(uncheckedPattern) || [];
-            const checked = text.match(checkedPattern) || [];
+#           // Get PR number
+#           const prNumber = context.payload.pull_request?.number ||
+#                           context.payload.issue?.number;
 
-            console.log(`Found ${unchecked.length} unchecked and ${checked.length} checked boxes`);
-            return unchecked.length > 0;
-          }
+#           if (!prNumber) {
+#             console.log('No PR number found');
+#             return;
+#           }
 
-          try {
-            // Check PR comments (issue comments on PR)
-            const comments = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
+#           // Function to check for unchecked checkboxes
+#           function hasUncheckedCheckboxes(text) {
+#             if (!text) return false;
+#             // Match unchecked checkboxes: - [ ] but not - [x] or - [X]
+#             const uncheckedPattern = /^[\s]*-[\s]*\[[\s]*\][\s]*/gm;
+#             const checkedPattern = /^[\s]*-[\s]*\[[xX]\][\s]*/gm;
 
-            console.log(`Checking ${comments.data.length} PR comments`);
-            for (const comment of comments.data) {
-              if (hasUncheckedCheckboxes(comment.body)) {
-                console.log(`Found unchecked checkbox in comment: ${comment.html_url}`);
-                hasUncheckedBoxes = true;
-              }
-            }
+#             const unchecked = text.match(uncheckedPattern) || [];
+#             const checked = text.match(checkedPattern) || [];
 
-            // Check review comments (file-specific comments)
-            const reviewComments = await github.rest.pulls.listReviewComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber
-            });
+#             console.log(`Found ${unchecked.length} unchecked and ${checked.length} checked boxes`);
+#             return unchecked.length > 0;
+#           }
 
-            console.log(`Checking ${reviewComments.data.length} review comments`);
-            for (const comment of reviewComments.data) {
-              if (hasUncheckedCheckboxes(comment.body)) {
-                console.log(`Found unchecked checkbox in review comment: ${comment.html_url}`);
-                hasUncheckedBoxes = true;
-              }
-            }
+#           try {
+#             // Check PR comments (issue comments on PR)
+#             const comments = await github.rest.issues.listComments({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               issue_number: prNumber
+#             });
 
-            // Check PR description
-            const pr = await github.rest.pulls.get({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber
-            });
+#             console.log(`Checking ${comments.data.length} PR comments`);
+#             for (const comment of comments.data) {
+#               if (hasUncheckedCheckboxes(comment.body)) {
+#                 console.log(`Found unchecked checkbox in comment: ${comment.html_url}`);
+#                 hasUncheckedBoxes = true;
+#               }
+#             }
 
-            console.log('Checking PR description');
-            if (hasUncheckedCheckboxes(pr.data.body)) {
-              console.log('Found unchecked checkbox in PR description');
-              hasUncheckedBoxes = true;
-            }
+#             // Check review comments (file-specific comments)
+#             const reviewComments = await github.rest.pulls.listReviewComments({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               pull_number: prNumber
+#             });
 
-            // Check files changed for checkboxes in the diff
-            const files = await github.rest.pulls.listFiles({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: prNumber
-            });
+#             console.log(`Checking ${reviewComments.data.length} review comments`);
+#             for (const comment of reviewComments.data) {
+#               if (hasUncheckedCheckboxes(comment.body)) {
+#                 console.log(`Found unchecked checkbox in review comment: ${comment.html_url}`);
+#                 hasUncheckedBoxes = true;
+#               }
+#             }
 
-            console.log(`Checking ${files.data.length} changed files`);
-            for (const file of files.data) {
-              if (file.patch && hasUncheckedCheckboxes(file.patch)) {
-                console.log(`Found unchecked checkbox in file changes: ${file.filename}`);
-                hasUncheckedBoxes = true;
-              }
-            }
+#             // Check PR description
+#             const pr = await github.rest.pulls.get({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               pull_number: prNumber
+#             });
 
-          } catch (error) {
-            console.error('Error checking checkboxes:', error);
-            process.exit(1);
-          }
+#             console.log('Checking PR description');
+#             if (hasUncheckedCheckboxes(pr.data.body)) {
+#               console.log('Found unchecked checkbox in PR description');
+#               hasUncheckedBoxes = true;
+#             }
 
-          if (hasUncheckedBoxes) {
-            console.log('❌ Found unchecked checkboxes - failing check');
-            process.exit(1);
-          } else {
-            console.log('✅ No unchecked checkboxes found - check passed');
-          }
+#             // Check files changed for checkboxes in the diff
+#             const files = await github.rest.pulls.listFiles({
+#               owner: context.repo.owner,
+#               repo: context.repo.repo,
+#               pull_number: prNumber
+#             });
+
+#             console.log(`Checking ${files.data.length} changed files`);
+#             for (const file of files.data) {
+#               if (file.patch && hasUncheckedCheckboxes(file.patch)) {
+#                 console.log(`Found unchecked checkbox in file changes: ${file.filename}`);
+#                 hasUncheckedBoxes = true;
+#               }
+#             }
+
+#           } catch (error) {
+#             console.error('Error checking checkboxes:', error);
+#             process.exit(1);
+#           }
+
+#           if (hasUncheckedBoxes) {
+#             console.log('❌ Found unchecked checkboxes - failing check');
+#             process.exit(1);
+#           } else {
+#             console.log('✅ No unchecked checkboxes found - check passed');
+#           }
