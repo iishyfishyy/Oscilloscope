@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	
-  grunt.initConfig({
+  grunt.initConfig({ // test
   clean: ['dist/'],
     browserify: {
       'dist/js/bundle.js': ['build/js/bundle.js']
